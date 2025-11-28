@@ -10,6 +10,8 @@ import ru.practicum.habit.dto.NewHabitRequest;
 import ru.practicum.habit.dto.UpdateHabitRequest;
 import ru.practicum.habit.service.HabitService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/habits")
 @RequiredArgsConstructor
@@ -33,4 +35,15 @@ public class HabitController {
     void deleteHabit(@PathVariable @Positive Long habitId) {
         habitService.deleteHabit(habitId);
     }
+
+    @GetMapping("/habitId")
+    HabitDto getById(@PathVariable @Positive Long habitId) {
+        return habitService.getById(habitId);
+    }
+
+    @GetMapping("/category/{categoryId}")
+    List<HabitDto> getHabitByCategory(@PathVariable @Positive Long categoryId) {
+        return habitService.getHabitByCategory(categoryId);
+    }
+
 }

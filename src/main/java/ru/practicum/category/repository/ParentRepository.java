@@ -11,15 +11,13 @@ import java.util.List;
 @Repository
 public interface ParentRepository extends JpaRepository<CategoryParent, Long> {
 
-    @Modifying
-    @Query("SELECT c COUNT(h.id) AS habit_count" +
-            "FROM categories c" +
-            "LEFT JOIN" +
-            "habits h ON c.id = h.category_id" +
-            "GROUP BY" +
-            "c.id, c.name" +
-            "ORDER BY" +
-            "habit_count DESC" +
+
+    @Query("SELECT c " +
+            "FROM CategoryParent c " +
+            "LEFT JOIN Habit h ON c.id = h.category.id " +
+            "GROUP BY c.id, c.name " +
+            "ORDER BY COUNT(h.id) DESC " +
             "LIMIT 20")
     List<CategoryParent> getPopularCategory();
 }
+

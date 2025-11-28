@@ -2,9 +2,11 @@ package ru.practicum.habit.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.activity.dto.NewActivityRequest;
 import ru.practicum.helper.RequestParamHelper;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewHabitRequest {
+    @Positive
     Long categoryParent;
 
     @NotBlank
@@ -27,4 +30,9 @@ public class NewHabitRequest {
     @NotBlank
     @JsonFormat(pattern = RequestParamHelper.DATE_TIME_FORMAT)
     LocalDateTime start;
+
+    @Positive
+    Long activityId;
+
+    NewActivityRequest newActivityRequest;
 }
