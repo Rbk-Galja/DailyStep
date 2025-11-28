@@ -1,26 +1,31 @@
 package ru.practicum.habit.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.category.dto.CategoryParentDto;
 import ru.practicum.category.mapper.CategoryParentMapper;
 import ru.practicum.category.model.CategoryParent;
 import ru.practicum.category.repository.ParentRepository;
-import ru.practicum.category.service.ParentService;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.habit.dto.HabitDto;
+import ru.practicum.habit.dto.HabitShortDto;
 import ru.practicum.habit.dto.NewHabitRequest;
 import ru.practicum.habit.dto.UpdateHabitRequest;
 import ru.practicum.habit.mapper.HabitMapper;
 import ru.practicum.habit.model.Habit;
 import ru.practicum.habit.repository.HabitRepository;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
 public class HabitServiceImpl implements HabitService {
     private final HabitRepository habitRepository;
-    private final ParentService parentService;
     private final ParentRepository parentRepository;
     private final HabitMapper habitMapper;
     private final CategoryParentMapper parentMapper;
@@ -34,7 +39,7 @@ public class HabitServiceImpl implements HabitService {
         Habit habit = habitMapper.mapToHabitNew(request, categoryParent);
         habitRepository.save(habit);
         log.info("Создание активности {} завершено", habit);
-        return habitMapper.mapToHabitDto(habit, parentMapper.mapToDto(categoryParent));
+        return habitMapper.mapToHabitDto(habit, mapToDto(categoryParent));
     }
 
     @Override
@@ -60,7 +65,7 @@ public class HabitServiceImpl implements HabitService {
             log.info("Обновлено время активности id = {}", id);
         }
         log.info("Обновление активности id = {} завершено", id);
-        return habitMapper.mapToHabitDto(habit, parentMapper.mapToDto(habit.getCategory()));
+        return habitMapper.mapToHabitDto(habit, mapToDto(habit.getCategory()));
     }
 
     @Override
@@ -68,6 +73,62 @@ public class HabitServiceImpl implements HabitService {
         log.info("Начинаем удаление активности id = {}", id);
         Habit habit = findById(id);
         habitRepository.delete(habit);
+    }
+
+    @Override
+    public HabitDto getById(Long id) {
+        log.info("Начинаем получение активности по id = {}", id);
+        Habit habit = findById(id);
+        return habitMapper.mapToHabitDto(habit, mapToDto(habit.getCategory()));
+    }
+
+    @Override
+    public List<HabitDto> getHabitByCategory(Long id) {
+        log.info("Начинаем получение всех активностей для категории id = {}", id);
+        CategoryParent categoryParent = parentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("CategoryParent", id));
+        List<Habit> habits = habitRepository.findByCategoryId(id);
+        return habits.stream()
+                .map(habit -> habitMapper.mapToHabitDto(habit, mapToDto(categoryParent)))
+                .toList();
+    }
+
+    @Override
+    public List<HabitDto> findByStart(LocalDateTime start) {
+    log.info("Начинаем получение активности по дате проведения {}", start);
+    List<Habit> habits = habitRepository.findByStart(start);
+    log.info("Получение активностей по времени проведения завершено: {}", habits);
+    return habits.stream()
+            .map(habit -> habitMapper.mapToHabitDto(habit, mapToDto(habit.getCategory())))
+            .toList();
+    }
+
+    @Override
+    public List<HabitDto> findByStartEnd(LocalDateTime startDate, LocalDateTime endTime) {
+        log.info("Начинаем получение активности по начальной и конечной дате {}, {}", startDate, endTime);
+        List<Habit> habits = habitRepository.findByStartBetween(startDate, endTime);
+        log.info("Получение активностей в указанный период завершено {}", habits);
+        return habits.stream()
+                .map(habit -> habitMapper.mapToHabitDto(habit, mapToDto(habit.getCategory())))
+                .toList();
+    }
+
+    @Override
+    public List<HabitShortDto> findHabitByWeek() {
+        log.info("Начинаем получение самой длинной серии за последние 7 дней");
+        List<Habit> habits = habitRepository.findHabitForWeek(LocalDateTime.now().minusDays(7));
+        if (habits.isEmpty()) {
+            log.info("Активностей за последние 7 дней не найдено");
+            return new ArrayList<>();
+        }
+        log.info("Найдена самая большая серия активностей за последние 7 дней: {}", habits);
+        return habits.stream()
+                .map(habit -> habitMapper.mapToShortDto(habit, habit.getCategory().getName()))
+                .toList();
+    }
+
+    private CategoryParentDto mapToDto(CategoryParent categoryParent) {
+        return parentMapper.mapToDto(categoryParent);
     }
 
     private Habit findById(Long id) {

@@ -3,10 +3,9 @@ package ru.practicum.category.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.children.model.CategoryChildren;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -23,12 +22,8 @@ public class CategoryParent {
     @Column(name = "name")
     String name;
 
-    @ManyToMany
-    @JoinTable(name = "category_children",
-    joinColumns = @JoinColumn(name = "parent_id"),
-    inverseJoinColumns = @JoinColumn(name = "children_id")
-    )
-    List<CategoryChildren> children = new ArrayList<>();
+    @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    Set<CategoryChildren> children = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

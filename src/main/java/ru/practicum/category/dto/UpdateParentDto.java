@@ -1,15 +1,16 @@
 package ru.practicum.category.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryChildrenDto {
-    Long id;
+public class UpdateParentDto {
+    @NotBlank
+    @Size(min = 2, max = 120)
     String name;
 }
