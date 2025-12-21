@@ -16,6 +16,8 @@ import ru.practicum.helper.RequestParamHelper;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/habits")
 @RequiredArgsConstructor
@@ -49,24 +51,4 @@ public class HabitController {
     List<HabitDto> getHabitByCategory(@PathVariable @Positive Long categoryId) {
         return habitService.getHabitByCategory(categoryId);
     }
-
-    @GetMapping("/start")
-    List<HabitDto> findByStart(@RequestParam
-                               @DateTimeFormat(pattern = RequestParamHelper.DATE_TIME_FORMAT) LocalDateTime start) {
-        return habitService.findByStart(start);
-    }
-
-    @GetMapping("/start/end")
-    List<HabitDto> findByStartEnd(@RequestParam
-                                  @DateTimeFormat(pattern = RequestParamHelper.DATE_TIME_FORMAT) LocalDateTime startDate,
-                                  @RequestParam
-                                  @DateTimeFormat(pattern = RequestParamHelper.DATE_TIME_FORMAT) LocalDateTime endDate) {
-        return habitService.findByStartEnd(startDate, endDate);
-    }
-
-    @GetMapping("/popular")
-    List<HabitShortDto> findHabitForWeek() {
-        return habitService.findHabitByWeek();
-    }
-
 }

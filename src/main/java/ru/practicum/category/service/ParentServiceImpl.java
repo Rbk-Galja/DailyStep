@@ -15,7 +15,6 @@ import ru.practicum.category.model.CategoryParent;
 import ru.practicum.children.repository.ChildrenRepository;
 import ru.practicum.category.repository.ParentRepository;
 import ru.practicum.exception.EmptyParamException;
-import ru.practicum.exception.InvalidParamException;
 import ru.practicum.exception.NotFoundException;
 
 import java.util.List;

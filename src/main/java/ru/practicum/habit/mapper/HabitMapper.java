@@ -1,27 +1,48 @@
 package ru.practicum.habit.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import ru.practicum.category.dto.CategoryParentDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.practicum.activity.mapper.ActivityMapper;
+import ru.practicum.activity.model.ActivityType;
+import ru.practicum.category.mapper.CategoryParentMapper;
 import ru.practicum.category.model.CategoryParent;
 import ru.practicum.habit.dto.HabitDto;
 import ru.practicum.habit.dto.HabitShortDto;
 import ru.practicum.habit.dto.NewHabitRequest;
 import ru.practicum.habit.model.Habit;
-import ru.practicum.helper.RequestParamHelper;
 
-@Mapper(componentModel = "spring")
-public interface HabitMapper {
+@Component
+@RequiredArgsConstructor
+public final class HabitMapper {
+    private final CategoryParentMapper categoryParentMapper;
+    private final ActivityMapper activityMapper;
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "category", source = "parent")
-    @Mapping(target = "start", dateFormat = RequestParamHelper.DATE_TIME_FORMAT)
-    Habit mapToHabitNew(NewHabitRequest request, CategoryParent parent);
+    public Habit mapToHabitNew(NewHabitRequest request, CategoryParent parent, ActivityType activityType) {
+        return Habit.builder()
+                .title(request.getTitle())
+                .start(request.getStart())
+                .description(request.getDescription())
+                .activityType(activityType)
+                .category(parent)
+                .build();
+    }
 
-    @Mapping(target = "category", source = "categoryDto")
-    @Mapping(target = "start", dateFormat = RequestParamHelper.DATE_TIME_FORMAT)
-    HabitDto mapToHabitDto(Habit habit, CategoryParentDto categoryDto);
+    public HabitDto mapToHabitDto(Habit habit) {
+        return HabitDto.builder()
+                .title(habit.getTitle())
+                .description(habit.getDescription())
+                .start(habit.getStart())
+                .activity(activityMapper.mapToDto(habit.getActivityType()))
+                .category(categoryParentMapper.mapToDto(habit.getCategory()))
+                .build();
+    }
 
-    @Mapping(target = "categoryName", source = "categoryName")
-    HabitShortDto mapToShortDto(Habit habit, String categoryName);
+    public HabitShortDto mapToShortDto(Habit habit) {
+        return HabitShortDto.builder()
+                .title(habit.getTitle())
+                .start(habit.getStart())
+                .categoryName(habit.getCategory().getName())
+                .build();
+    }
+
 }

@@ -5,7 +5,6 @@ import ru.practicum.habit.dto.HabitShortDto;
 import ru.practicum.habit.dto.NewHabitRequest;
 import ru.practicum.habit.dto.UpdateHabitRequest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface HabitService {
@@ -19,9 +18,4 @@ public interface HabitService {
 
     List<HabitDto> getHabitByCategory(Long id);
 
-    List<HabitDto> findByStart(LocalDateTime start);
-
-    List<HabitDto> findByStartEnd(LocalDateTime startDate, LocalDateTime endTime);
-
-    List<HabitShortDto> findHabitByWeek();
 }

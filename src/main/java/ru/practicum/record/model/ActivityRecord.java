@@ -1,10 +1,11 @@
-package ru.practicum.children.model;
+package ru.practicum.record.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.category.model.CategoryParent;
+import ru.practicum.habit.model.Habit;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -12,26 +13,35 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "categories")
+@Table(name = "activity_records")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CategoryChildren {
+public class ActivityRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "named", unique = true, nullable = false)
-    String named;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    CategoryParent parent;
+    @JoinColumn(name = "habit_id")
+    Habit habit;
+
+    @JoinColumn(name = "start_time")
+    LocalDateTime startTime;
+
+    @JoinColumn(name = "end_time")
+    LocalDateTime endTime;
+
+    @JoinColumn(name = "val")
+    Integer value;
+
+    @JoinColumn(name = "notes")
+    String notes;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CategoryChildren children = (CategoryChildren) o;
-        return Objects.equals(id, children.id);
+        ActivityRecord that = (ActivityRecord) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

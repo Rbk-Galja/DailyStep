@@ -1,9 +1,8 @@
-package ru.practicum.children.model;
+package ru.practicum.activity.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.category.model.CategoryParent;
 
 import java.util.Objects;
 
@@ -12,26 +11,35 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "categories")
+@Table(name = "activity_types")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CategoryChildren {
+public class ActivityType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "named", unique = true, nullable = false)
-    String named;
+    @Column(name = "code", nullable = false, unique = true)
+    String code;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    CategoryParent parent;
+    @Column(name = "name")
+    String name;
+
+    @Column(name = "unit")
+    String unit;
+
+    @Column(name = "icon_name")
+    String iconName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "activity_category", nullable = false)
+    ActivityCategory activityCategory;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CategoryChildren children = (CategoryChildren) o;
-        return Objects.equals(id, children.id);
+        ActivityType that = (ActivityType) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

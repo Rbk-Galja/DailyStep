@@ -37,8 +37,8 @@ public class ChildrenServiceImpl implements ChildrenService {
         log.info("Начинаем создание подкатегории {}", dto);
         CategoryParent categoryParent = findParentById(dto.getParent());
         log.info("Определена категория для подкатегории: {}", categoryParent);
-        CategoryChildren children = categoryChildrenMapper.mapToDtoNew(dto, categoryParent);
-        childrenRepository.save(children);
+        CategoryChildren create = categoryChildrenMapper.mapToDtoNew(dto, categoryParent);
+        CategoryChildren children = childrenRepository.save(create);
         log.info("Создание подкатегории завершено {}", children);
         return categoryChildrenMapper.mapToDto(children);
     }

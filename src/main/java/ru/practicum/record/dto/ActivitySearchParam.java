@@ -1,18 +1,18 @@
-package ru.practicum.habit.dto;
+package ru.practicum.record.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class HabitShortDto {
-    String title;
+public class ActivitySearchParam {
+    Long habitId;
     LocalDateTime start;
-    String categoryName;
+    LocalDateTime end;
+    String text;
 }
