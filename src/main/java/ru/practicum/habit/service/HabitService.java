@@ -1,6 +1,7 @@
 package ru.practicum.habit.service;
 
 import ru.practicum.habit.dto.HabitDto;
+import ru.practicum.habit.dto.HabitShortDto;
 import ru.practicum.habit.dto.NewHabitRequest;
 import ru.practicum.habit.dto.UpdateHabitRequest;
 
