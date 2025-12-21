@@ -26,7 +26,6 @@ public class CategoryChildren {
     @JoinColumn(name = "parent_id")
     CategoryParent parent;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

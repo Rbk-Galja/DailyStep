@@ -1,6 +1,7 @@
 package ru.practicum.habit.service;
 
 import jakarta.transaction.Transactional;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,13 @@ import ru.practicum.category.model.CategoryParent;
 import ru.practicum.category.repository.ParentRepository;
 import ru.practicum.exception.EmptyParamException;
 import ru.practicum.exception.InvalidParamException;
+import ru.practicum.category.dto.CategoryParentDto;
+import ru.practicum.category.mapper.CategoryParentMapper;
+import ru.practicum.category.model.CategoryParent;
+import ru.practicum.category.repository.ParentRepository;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.habit.dto.HabitDto;
+import ru.practicum.habit.dto.HabitShortDto;
 import ru.practicum.habit.dto.NewHabitRequest;
 import ru.practicum.habit.dto.UpdateHabitRequest;
 import ru.practicum.habit.mapper.HabitMapper;
@@ -26,7 +32,7 @@ import java.util.List;
 @AllArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
 public class HabitServiceImpl implements HabitService {
-    private final HabitRepository habitRepository;
+   private final HabitRepository habitRepository;
     private final ParentRepository parentRepository;
     private final HabitMapper habitMapper;
     private final ActivityRepository activityRepository;

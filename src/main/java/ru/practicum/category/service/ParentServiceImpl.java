@@ -49,9 +49,9 @@ public class ParentServiceImpl implements ParentService {
         log.info("Начинаем добавление категории {}", category);
         CategoryParent categoryParent = new CategoryParent();
         categoryParent.setName(category.getName());
-        CategoryParent create = parentRepository.save(categoryParent);
-        log.info("Категория успешно добавлена {}", create);
-        return categoryParentMapper.mapToDto(create);
+        parentRepository.save(categoryParent);
+        log.info("Категория успешно добавлена {}", categoryParent);
+        return categoryParentMapper.mapToDto(categoryParent);
     }
 
     @Override

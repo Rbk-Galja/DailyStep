@@ -25,7 +25,6 @@ public class CategoryParent {
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     Set<CategoryChildren> children = new HashSet<>();
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
